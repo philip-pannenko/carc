@@ -85,86 +85,195 @@ $(function () {
     two_face_adjacent_castle: {
       class: 'two-face-adjacent-castle',
       count: 5,
-      faces: {T: 'FFF', R: 'FFF', B: 'CCC', L: 'CCC'}
+      faces: {
+        T: {face: 'FFF', segments: [0]},
+        R: {face: 'FFF', segments: [0]},
+        B: {face: 'CCC', segments: [1]},
+        L: {face: 'CCC', segments: [1]}
+      },
+      segments: [{type: 'F'}, {type: 'C'}]
     },
     one_face_castle_with_t_road: {
       class: 'one-face-castle-with-t-road', count: 3,
-      faces: {T: 'FRF', R: 'FRF', B: 'FRF', L: 'CCC'}
+      faces: {
+        T: {face: 'FRF', segments: [0, 1, 2]},
+        R: {face: 'FRF', segments: [2, 3, 4]},
+        B: {face: 'FRF', segments: [4, 5, 0]},
+        L: {face: 'CCC', segments: [6]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'R'}, {type: 'C'}]
     },
     one_face_opposite_separate_castles: {
       class: 'one-face-opposite-separate-castles', count: 3,
-      faces: {T: 'FFF', R: 'CCC', B: 'FFF', L: 'CCC'}
+      faces: {
+        T: {face: 'FFF', segments: [0]},
+        R: {face: 'CCC', segments: [1]},
+        B: {face: 'FFF', segments: [0]},
+        L: {face: 'CCC', segments: [2]}
+      },
+      segments: [{type: 'F'}, {type: 'C'}, {type: 'C'}]
     },
     cloister: {
       class: 'cloister ', count: 4,
-      faces: {T: 'FFF', R: 'FFF', B: 'FFF', L: 'FFF'}
+      faces: {
+        T: {face: 'FFF', segments: [0]},
+        R: {face: 'FFF', segments: [0]},
+        B: {face: 'FFF', segments: [0]},
+        L: {face: 'FFF', segments: [0]}
+      },
+      segments: [{type: 'F'}]
     },
+
     cloister_with_road: {
       class: 'cloister-with-road', count: 2,
-      faces: {T: 'FFF', R: 'FRF', B: 'FFF', L: 'FFF'}
+      faces: {
+        T: {face: 'FFF', segments: [0]},
+        R: {face: 'FRF', segments: [0, 1, 0]},
+        B: {face: 'FFF', segments: [0]},
+        L: {face: 'FFF', segments: [0]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}]
     },
     intersect_road: {
       class: 'intersect-road', count: 1,
-      faces: {T: 'FRF', R: 'FRF', B: 'FRF', L: 'FRF'}
+      faces: {
+        T: {face: 'FRF', segments: [0, 1, 2]},
+        R: {face: 'FRF', segments: [2, 3, 4]},
+        B: {face: 'FRF', segments: [4, 5, 6]},
+        L: {face: 'FRF', segments: [6, 7, 0]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'R'}]
     },
     curved_road: {
       class: 'curved-road', count: 9,
-      faces: {T: 'FRF', R: 'FRF', B: 'FFF', L: 'FFF'}
+      faces: {
+        T: {face: 'FRF', segments: [0, 1, 2]},
+        R: {face: 'FRF', segments: [2, 1, 0]},
+        B: {face: 'FFF', segments: [0]},
+        L: {face: 'FFF', segments: [0]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}]
     },
     straight_road: {
       class: 'straight-road', count: 8,
-      faces: {T: 'FFF', R: 'FRF', B: 'FFF', L: 'FRF'}
+      faces: {
+        T: {face: 'FFF', segments: [0]},
+        R: {face: 'FRF', segments: [0, 1, 2]},
+        B: {face: 'FFF', segments: [2]},
+        L: {face: 'FRF', segments: [0, 1, 2]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}]
     },
     t_road: {
       class: 't-road', count: 4,
-      faces: {T: 'FRF', R: 'FRF', B: 'FRF', L: 'FFF'}
+      faces: {
+        T: {face: 'FRF', segments: [0, 1, 2]},
+        R: {face: 'FRF', segments: [2, 3, 4]},
+        B: {face: 'FRF', segments: [4, 5, 0]},
+        L: {face: 'FFF', segments: [0]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'R'}]
     },
     four_face_castle: {
       class: 'four-face-castle', count: 1,
-      faces: {T: 'CCC', R: 'CCC', B: 'CCC', L: 'CCC'}
+      faces: {
+        T: {face: 'CCC', segments: [0]},
+        R: {face: 'CCC', segments: [0]},
+        B: {face: 'CCC', segments: [0]},
+        L: {face: 'CCC', segments: [0]}
+      },
+      segments: [{type: 'C'}]
     },
     three_face_castle: {
       class: 'three-face-castle', count: 4,
-      faces: {T: 'CCC', R: 'FFF', B: 'CCC', L: 'CCC'}
+      faces: {
+        T: {face: 'CCC', segments: [0]},
+        R: {face: 'FFF', segments: [1]},
+        B: {face: 'CCC', segments: [0]},
+        L: {face: 'CCC', segments: [0]}
+      },
+      segments: [{type: 'C'}, {type: 'F'}]
     },
     three_face_castle_with_road: {
       class: 'three-face-castle-with-road', count: 3,
-      faces: {T: 'CCC', R: 'FRF', B: 'CCC', L: 'CCC'}
+      faces: {
+        T: {face: 'CCC', segments: [0]},
+        R: {face: 'FRF', segments: [1, 2, 3]},
+        B: {face: 'CCC', segments: [0]},
+        L: {face: 'CCC', segments: [0]}
+      },
+      segments: [{type: 'C'}, {type: 'F'}, {type: 'R'}, {type: 'F'}]
     },
     one_face_adjacent_separate_castles: {
       class: 'one-face-adjacent-separate-castles', count: 2,
-      faces: {T: 'CCC', R: 'FFF', B: 'FFF', L: 'CCC'}
+      faces: {
+        T: {face: 'CCC', segments: [0]},
+        R: {face: 'FFF', segments: [1]},
+        B: {face: 'FFF', segments: [1]},
+        L: {face: 'CCC', segments: [2]}
+      },
+      segments: [{type: 'C'}, {type: 'F'}, {type: 'C'}]
     },
     one_face_castle: {
       class: 'one-face-castle', count: 5,
-      faces: {T: 'FFF', R: 'FFF', B: 'FFF', L: 'CCC'}
+      faces: {
+        T: {face: 'FRF', segments: [0]},
+        R: {face: 'FRF', segments: [0]},
+        B: {face: 'FRF', segments: [0]},
+        L: {face: 'CCC', segments: [1]}
+      },
+      segments: [{type: 'F'}, {type: 'C'}]
     },
     one_face_castle_with_straight_road: {
       class: 'one-face-castle-with-straight-road',
       count: 4,
       faces: {
-        T: {face: 'FRF', segments: [1, 2, 3]},
-        R: {face: 'FFF', segments: [3]},
-        B: {face: 'FRF', segments: [1, 2, 3]},
-        L: {face: 'CCC', segments: [4]}
+        T: {face: 'FRF', segments: [0, 1, 2]},
+        R: {face: 'FFF', segments: [2]},
+        B: {face: 'FRF', segments: [0, 1, 2]},
+        L: {face: 'CCC', segments: [3]}
       },
-      segments: {1: {type: 'F'}, 2: {type: 'R'}, 3: {type: 'F'}, 4: {type: 'C'}}
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'C'}]
     },
     one_face_castle_with_curved_road_1: {
       class: 'one-face-castle-with-curved-road-1', count: 3,
-      faces: {T: 'FRF', R: 'FRF', B: 'FFF', L: 'CCC'}
+      faces: {
+        T: {face: 'FRF', segments: [0, 1, 2]},
+        R: {face: 'FRF', segments: [2, 1, 0]},
+        B: {face: 'FFF', segments: [0]},
+        L: {face: 'CCC', segments: [3]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'C'}]
     },
     one_face_castle_with_curved_road_2: {
       class: 'one-face-castle-with-curved-road-2', count: 3,
-      faces: {T: 'FFF', R: 'FRF', B: 'FRF', L: 'CCC'}
+      faces: {
+        T: {face: 'FFF', segments: [0]},
+        R: {face: 'FRF', segments: [0, 1, 2]},
+        B: {face: 'FRF', segments: [0, 1, 2]},
+        L: {face: 'CCC', segments: [3]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'C'}]
     },
     two_face_opposite_castle: {
       class: 'two-face-opposite-castle', count: 3,
-      faces: {T: 'CCC', R: 'FFF', B: 'CCC', L: 'FFF'}
+      faces: {
+        T: {face: 'CCC', segments: [0]},
+        R: {face: 'FFF', segments: [1]},
+        B: {face: 'CCC', segments: [0]},
+        L: {face: 'FFF', segments: [2]}
+      },
+      segments: [{type: 'C'}, {type: 'F'}, {type: 'F'}]
     },
     two_face_adjacent_castle_with_curved_road: {
       class: 'two-face-adjacent-castle-with-curved-road', count: 5,
-      faces: {T: 'FRF', R: 'FRF', B: 'CCC', L: 'CCC'}
+      faces: {
+        T: {face: 'FRF', segments: [0, 1, 2]},
+        R: {face: 'FRF', segments: [2, 1, 0]},
+        B: {face: 'CCC', segments: [3]},
+        L: {face: 'CCC', segments: [3]}
+      },
+      segments: [{type: 'F'}, {type: 'R'}, {type: 'F'}, {type: 'C'}]
     }
   };
   app.gameView = new app.GameView();
