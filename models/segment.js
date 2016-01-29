@@ -2,9 +2,14 @@ var app = app || {};
 (function () {
   'use strict';
   app.Segment = Backbone.Model.extend({
-    defaults: {
+    default: {
       id: -1,
-      type: undefined
+      owned: undefined,
+      type: undefined,
+      connected: undefined
+    },
+    initialize: function () {
+      this.set('connected', []);
     }
   });
 })();

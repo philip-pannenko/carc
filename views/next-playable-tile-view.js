@@ -6,6 +6,7 @@ var app = app || {};
     model: app.NextPlayableTile,
     initialize: function () {
       this.model = new app.NextPlayableTile();
+      this.model.on('change:currentTurnTile', this.render, this);
       Backbone.on('assignCurrentTileToTile', this.assignCurrentTileToTile, this);
       Backbone.on('compareTileToCurrentTurnTile', this.compareTileToCurrentTurnTile, this);
       Backbone.on('nextTurn', this.nextTurn, this);
@@ -36,28 +37,29 @@ var app = app || {};
       this.render();
     },
     assignCurrentTileToTile: function (tile) {
-      tile.set('placedTile', this.model.get('currentTurnTile'));
-      tile.set('name', this.model.get('currentTurnTile').class);
+      tile.set({
+        placedTile: this.model.get('currentTurnTile'),
+        name: this.model.get('currentTurnTile').class,
+        state: app.TileState.occupied
+      });
     },
     nextTurn: function () {
-      debugger;
       this.model.set('currentTurnTile', this.model.get('playableTiles').pop());
-      this.render();
     },
-    compareTileToCurrentTurnTile: function (args) {
-      var tile = args[0];
-      var dir = args[1];
-      var key = args[2];
-      var isTilePlaced = args[3];
-      var adjacentNeighbor = tile.get('adjacentNeighbors')[key];
-      if (adjacentNeighbor && adjacentNeighbor.get('isPlaced')) {
-        console.log('adjacentNeighbor.id ' + key + ' ' + adjacentNeighbor.id);
-        var oppositeDir = dir.dir.opposite.name;
-        var neighborFace = adjacentNeighbor.get('placedTile').faces[oppositeDir];
-        var playableTileFace = this.model.get('currentTurnTile').faces[key]
-        if (!(playableTileFace === neighborFace)) {
-          isTilePlaced.isValid = false;
+    compareTileToCurrentTurnTile: function (tile) {
+      var foundConflictingNeighborFace = _.find(app.NeighborDirection, function (dir) {
+        var adjacentNeighbor = tile.get('adjacentNeighbors')[dir.key];
+        if (adjacentNeighbor && adjacentNeighbor.get('state') === app.TileState.occupied) {
+          var oppositeDir = dir.dir.opposite.name;
+          var neighborFace = adjacentNeighbor.get('placedTile').faces[oppositeDir];
+          var playableTileFace = this.model.get('currentTurnTile').faces[dir.key];
+          return playableTileFace.face !== neighborFace.face;
+        } else {
+          return false;
         }
+      }, this);
+      if (foundConflictingNeighborFace === undefined) {
+        this.assignCurrentTileToTile(tile);
       }
     }
   });

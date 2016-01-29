@@ -5,10 +5,11 @@ var app = app || {};
     defaults: {
       id: -1,
       name: undefined,
-      isPlayable: false,
-      isPlaced: false,
+      //isPlayable: false,
+      //isPlaced: false,
       placedTile: undefined,
-      adjacentNeighbors: undefined
+      adjacentNeighbors: undefined,
+      state: undefined
     },
     initialize: function () {
       this.set('adjacentNeighbors', {});

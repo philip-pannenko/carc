@@ -17,20 +17,16 @@ var app = app || {};
       if (this.model.get('name')) {
         this.$el.addClass('tile ' + this.model.get('name'));
       }
-      if (this.model.get('isPlayable') && !this.model.get('isPlacable')) {
+      if (this.model.get('state') === app.TileState.unoccupied) {
         this.$el.addClass('playable');
       }
       this.$el.html(this.model.get('id'));
     },
     tileClicked: function () {
-      if (this.model.get('isPlayable')) {
-        var isTilePlaced = {isValid: true}; // used to determine if following triggers are performed
-        console.log('this.model.id ' + this.model.id);
-        _.map(app.NeighborDirection, function (dir, key) {
-          Backbone.trigger('compareTileToCurrentTurnTile', [this.model, dir, key, isTilePlaced]);
-        }, this);
-        if (isTilePlaced.isValid) {
-          Backbone.trigger('assignCurrentTileToTile', this.model);
+      debugger;
+      if (this.model.get('state') === app.TileState.unoccupied) {
+        Backbone.trigger('compareTileToCurrentTurnTile', this.model);
+        if (this.model.get('state') === app.TileState.occupied) {
           Backbone.trigger('tilePlaced', this.el);
         }
       } else {

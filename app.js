@@ -2,9 +2,19 @@ var app = app || {};
 $(function () {
   'use strict';
   app.TILE_SEQ_NUM = 10;
-  app.SEGMENT_SEQ_NUM = 1;
+  app.SEGMENT_SEQ_NUM = 0;
   Array.prototype.clear = function () {
     this.splice(0, this.length);
+  };
+  app.TileState = {
+    unoccupied: 'Unoccupied',
+    occupied: 'Occupied'
+  };
+  app.SegmentType= {
+    F : {type:'Farm'},
+    R : {type:'Road'},
+    Ca : {type:'Castle'},
+    Cl: {type:'Cloisture'}
   };
   app.Direction = {
     TL: {
@@ -76,10 +86,10 @@ $(function () {
   app.Rotation._270.CW = app.Rotation._0;
   app.Rotation._270.CCW = app.Rotation._180;
   app.NeighborDirection = {
-    T: {dir: app.Direction.T, CW: app.Direction.R, CCW: app.Direction.L},
-    R: {dir: app.Direction.R, CW: app.Direction.B, CCW: app.Direction.T},
-    L: {dir: app.Direction.L, CW: app.Direction.T, CCW: app.Direction.B},
-    B: {dir: app.Direction.B, CW: app.Direction.L, CCW: app.Direction.R}
+    T: {key: 'T', dir: app.Direction.T, CW: app.Direction.R, CCW: app.Direction.L},
+    R: {key: 'R', dir: app.Direction.R, CW: app.Direction.B, CCW: app.Direction.T},
+    L: {key: 'L', dir: app.Direction.L, CW: app.Direction.T, CCW: app.Direction.B},
+    B: {key: 'B', dir: app.Direction.B, CW: app.Direction.L, CCW: app.Direction.R}
   };
   app.PlayableTiles = {
     two_face_adjacent_castle: {

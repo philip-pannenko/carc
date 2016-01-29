@@ -8,8 +8,8 @@ var app = app || {};
     },
     initialize: function () {
 
-      this.availableTiles = {};
-      this.segments = new app.Segments();
+      this.set('availableTiles', {});
+      this.set('segments', new app.Segments());
 
       var tempPlayableTiles = [];
 
@@ -29,8 +29,8 @@ var app = app || {};
               var segment = clonedPlayableTile.segments[segmentIndex];
               var segmentVar = new app.Segment();
               if (!segment.id) {
-                segment.id = app.SEGMENT_SEQ_NUM++
-                this.segments.push(segment);
+                segment.id = app.SEGMENT_SEQ_NUM++;
+                this.get('segments').push(segment);
               }
             }, this);
 
@@ -41,8 +41,6 @@ var app = app || {};
           tempPlayableTiles.push(clonedPlayableTile);
         }
       }, this);
-
-      debugger;
 
     }
   });
