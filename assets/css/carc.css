@@ -1,0 +1,133 @@
+
+table {
+    border-collapse: collapse;
+}
+
+table td {
+    border: 1px solid black;
+    height: 152px;
+    width: 152px;
+}
+
+table td {
+    vertical-align: top;
+    text-align: left;
+}
+
+.tile {
+    /*display: block;*/
+    /*height:152px;*/
+    /*width:152px;*/
+    /*position:absolute;*/
+    background-image: url('../images/tiles.png');
+    background-repeat: no-repeat;
+}
+
+.playable {
+    background-color: yellow;
+}
+
+._00 {
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+
+._90 {
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+._180 {
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+._270 {
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+
+.two-face-adjacent-castle {
+    background-position: -54px -110px;
+}
+
+.one-face-castle-with-t-road {
+    background-position: -247px -110px;
+}
+
+.one-face-opposite-separate-castles {
+    background-position: -440px -110px;
+}
+
+.cloister {
+    background-position: -634px -110px;
+}
+
+.cloister-with-road {
+    background-position: -827px -110px;
+}
+
+.intersect-road {
+    background-position: -1021px -110px;
+}
+
+.curved-road {
+    background-position: -1214px -110px;
+}
+
+.straight-road {
+    background-position: -1407px -110px;
+}
+
+.t-road {
+    background-position: -1601px -110px;
+}
+
+.four-face-castle {
+    background-position: -54px -343px;
+}
+
+.three-face-castle {
+    background-position: -247px -343px;
+}
+
+.three-face-castle-with-road {
+    background-position: -440px -343px;
+}
+
+.one-face-adjacent-separate-castles {
+    background-position: -634px -343px;
+}
+
+.one-face-castle {
+    background-position: -827px -343px;
+}
+
+.one-face-castle-with-straight-road {
+    background-position: -1021px -343px;
+}
+
+.one-face-castle-with-curved-road-1 {
+    background-position: -1214px -343px;
+}
+
+.one-face-castle-with-curved-road-2 {
+    background-position: -1407px -343px;
+}
+
+.two-face-opposite-castle {
+    background-position: -1601px -343px;
+}
+
+.two-face-adjacent-castle-with-curved-road {
+    background-position: -1794px -343px;
+}
+
