@@ -2,7 +2,7 @@ var app = app || {};
 $(function () {
   'use strict';
   app.TILE_SEQ_NUM = 10;
-  app.SEGMENT_SEQ_NUM = 0;
+  app.SEGMENT_SEQ_NUM = 1;
   Array.prototype.clear = function () {
     this.splice(0, this.length);
   };
@@ -10,11 +10,11 @@ $(function () {
     unoccupied: 'Unoccupied',
     occupied: 'Occupied'
   };
-  app.SegmentType= {
-    F : {type:'Farm'},
-    R : {type:'Road'},
-    Ca : {type:'Castle'},
-    Cl: {type:'Cloisture'}
+  app.SegmentType = {
+    F: {type: 'Farm'},
+    R: {type: 'Road'},
+    Ca: {type: 'Castle'},
+    Cl: {type: 'Cloisture'}
   };
   app.Direction = {
     TL: {
@@ -133,7 +133,6 @@ $(function () {
       },
       segments: [{type: 'F'}]
     },
-
     cloister_with_road: {
       class: 'cloister-with-road', count: 2,
       faces: {

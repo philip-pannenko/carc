@@ -9,7 +9,7 @@ var app = app || {};
     },
     initialize: function () {
 
-      var tempPlayableTiles = new Array();
+      var tempPlayableTiles = [];
       _.each(app.PlayableTiles, function (playableTile) {
         for (var i = 0; i < playableTile.count; i++) {
           var clonedPlayableTile = _.clone(playableTile);

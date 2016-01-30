@@ -11,34 +11,19 @@ var app = app || {};
       this.set('availableTiles', {});
       this.set('segments', new app.Segments());
 
-      var tempPlayableTiles = [];
-
+      // make each tile
       _.each(app.PlayableTiles, function (playableTile) {
-
+        // make an appropriate amount of each tiles based on count
         for (var i = 0; i < playableTile.count; i++) {
-          var clonedPlayableTile = _.clone(playableTile);
-
-          clonedPlayableTile.segments = [];
-          _.each(playableTile.segments, function (segment) {
-            clonedPlayableTile.segments.push(_.clone(segment));
-          });
-
-          _.map(app.NeighborDirection, function (dir, key) {
-
-            _.each(clonedPlayableTile.faces[key].segments, function (segmentIndex) {
-              var segment = clonedPlayableTile.segments[segmentIndex];
-              var segmentVar = new app.Segment();
-              if (!segment.id) {
-                segment.id = app.SEGMENT_SEQ_NUM++;
-                this.get('segments').push(segment);
-              }
-            }, this);
-
-
+          // deep object clone
+          var clonedPlayableTile = JSON.parse(JSON.stringify(playableTile));
+          // pre add the segment to a list of segments
+          _.each(clonedPlayableTile.segments, function(segment) {
+            // append an id to this tiles segment
+            segment.id = app.SEGMENT_SEQ_NUM++;
+            // add the segment to our games collection
+            this.get('segments').push(new app.Segment({id: segment.id, type: segment.type}));
           }, this);
-
-          clonedPlayableTile.faces = _.clone(clonedPlayableTile.faces);
-          tempPlayableTiles.push(clonedPlayableTile);
         }
       }, this);
 

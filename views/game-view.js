@@ -8,7 +8,7 @@ var app = app || {};
       'click button.rotate': 'rotate'
     },
     initialize: function () {
-      Backbone.on('initializeSegment', this.initializeSegment, this);
+      //Backbone.on('initializeSegment', this.initializeSegment, this);
 
       this.model = new app.Game();
       this.model.set('segments', new app.Segments());
@@ -17,17 +17,17 @@ var app = app || {};
     },
     rotate: function (e) {
       Backbone.trigger('rotate', e);
-    },
-
-    initializeSegment: function(segments) {
-
-      _.each(segments, function(segment) {
-        var segmentModel = new app.Segment({id: app.SEGMENT_SEQ_NUM++, type: segment.type})
-      });
-
-
-      this.model.get('segments').push()
     }
+    //,
+    //initializeSegment: function(segments) {
+    //
+    //  _.each(segments, function(segment) {
+    //    var segmentModel = new app.Segment({id: app.SEGMENT_SEQ_NUM++, type: segment.type})
+    //  });
+    //
+    //
+    //  this.model.get('segments').push()
+    //}
 
 
   });
