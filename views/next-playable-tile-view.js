@@ -48,7 +48,6 @@ var app = app || {};
       if (!foundConflictingNeighborFace) {
         // assign this models tile info with the tile that was passed into this method
         tile.set({
-          name: this.model.get('name'),
           class: this.model.get('class'),
           faces: this.model.get('faces'),
           segments: this.model.get('segments'),
