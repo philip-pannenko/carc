@@ -10,15 +10,12 @@ var app = app || {};
       this.model.on('change', this.render, this);
     },
     render: function () {
+      debugger;
       this.$el.removeClass();
-      if (this.model.get('placedTile')) {
-        this.$el.addClass(this.model.get('placedTile').rotation.class);
-      }
-      if (this.model.get('name')) {
-        this.$el.addClass('tile ' + this.model.get('name'));
-      }
       if (this.model.get('state') === app.TileState.unoccupied) {
         this.$el.addClass('playable');
+      } else if (this.model.get('state') === app.TileState.occupied) {
+        this.$el.addClass('tile ' + this.model.get('class') + ' _' + this.model.get('rotation').id);
       }
       this.$el.html(this.model.get('id'));
     },
