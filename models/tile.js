@@ -15,7 +15,6 @@ var app = app || {};
     },
 
     rotate: function (rotation) {
-      rotation = rotation.currentTarget.id;
       this.set('rotation', this.get('rotation')[rotation]);
       var faces = this.get('faces');
       var temp = faces['T'];

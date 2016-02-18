@@ -7,8 +7,8 @@ var app = app || {};
     initialize: function () {
       this.model.on('change:currentTurnTile', this.render, this);
       this.model.on('change:rotation', this.render, this);
-      Backbone.on('compareTileToCurrentTurnTile', this.model.compareTileToCurrentTurnTile, this.model);
-      Backbone.on('rotate', this.model.rotate, this.model);
+      Backbone.on('compareTileToCurrentTurnTile', this.compareTileToCurrentTurnTile, this);
+      Backbone.on('rotate', this.rotate, this);
       this.render();
     },
     render: function () {
@@ -19,5 +19,11 @@ var app = app || {};
     //  this.model.rotate(e.currentTarget.id);
     //  this.render();
     //}
+    compareTileToCurrentTurnTile: function(tile) {
+      this.model.compareTileToCurrentTurnTile(tile);
+    },
+    rotate: function(e) {
+      this.model.rotate(e.currentTarget.id);
+    }
   });
 })(jQuery);
