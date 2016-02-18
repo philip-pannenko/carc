@@ -144,8 +144,9 @@ describe('TileModel', function () {
   describe('behaviour', function () {
     it('should rotate correctly', function () {
 
-      var CW = {currentTarget: {id: 'CW'}};
-      var CCW = {currentTarget: {id: 'CCW'}};
+      var CW = 'CW';
+      var CCW = 'CCW';
+
       expect(tile.get('rotation')).toEqual(app.Rotation._0);
       tile.rotate(CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._90);
