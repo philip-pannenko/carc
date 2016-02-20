@@ -31,6 +31,24 @@ var app = app || {};
       }
     },
 
+    updatePlayableTiles: function() {
+      _.each(app.NeighborDirection, function (dir, key) {
+        var adjacentTile = this.get('adjacentNeighbors')[key];
+        if (adjacentTile.get('state') === null) {
+          adjacentTile.set('state', app.TileState.unoccupied);
+          // segment work todo
+        //} else if (adjacentTile.get('state') === app.TileState.occupied) {
+
+          // Get the opposite tiles segment and merge it with this one.
+          //var oppositeDir = dir.dir.opposite.name;
+          //debugger;
+          //var neighborFace = adjacentTile.get('faces')[oppositeDir];
+          //var playableTileFace = tile.get('faces')[key];
+          //return playableTileFace.face !== neighborFace.face;
+        }
+      }, this);
+    },
+
     compareTileToCurrentTurnTile: function(tile) {
       var foundConflictingNeighborFace = _.find(app.NeighborDirection, function (dir, key) {
         var adjacentNeighbor = tile.get('adjacentNeighbors')[key];

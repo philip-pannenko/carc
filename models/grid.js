@@ -7,8 +7,7 @@ var app = app || {};
         'row': undefined,
         'col': undefined,
         'totalColumnCount': undefined,
-        'totalRowCount': undefined,
-        'newTiles': []
+        'totalRowCount': undefined
       }
     }
   });

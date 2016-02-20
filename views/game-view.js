@@ -9,6 +9,7 @@ var app = app || {};
     },
     initialize: function () {
       Backbone.on('nextTurn', this.nextTurn, this);
+      this.$nextPlayableTile = this.$('#nextPlayableTile');
       this.model = new app.Game();
       this.model.set('gridView', new app.GridView({tile: this.model.get('nextPlayableTiles').pop()}));
       this.nextTurn();
@@ -17,10 +18,14 @@ var app = app || {};
       Backbone.trigger('rotate', e);
     },
     nextTurn: function () {
-      if(this.model.get('nextPlayableTileView')) {
-        this.model.get('nextPlayableTileView').destroy(); // destroys the DOM element. Need to add a new one!
+      debugger;
+      var view = this.model.get('nextPlayableTileView');
+      if(view) {
+        view.destroy();
       }
-      this.model.set('nextPlayableTileView', new app.NextPlayableTileView({model: this.model.get('nextPlayableTiles').pop()}));
+      view = new app.NextPlayableTileView({model: this.model.get('nextPlayableTiles').pop()});
+      this.model.set('nextPlayableTileView', view);
+      this.$nextPlayableTile.append(view.render().el);
     }
   });
 })(jQuery);
