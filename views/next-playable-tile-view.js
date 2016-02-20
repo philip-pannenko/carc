@@ -15,15 +15,15 @@ var app = app || {};
       this.$el.removeClass();
       this.$el.addClass('tile ' + this.model.get('class') + ' _' + this.model.get('rotation').id);
     },
-    //rotate: function (e) {
-    //  this.model.rotate(e.currentTarget.id);
-    //  this.render();
-    //}
     compareTileToCurrentTurnTile: function(tile) {
       this.model.compareTileToCurrentTurnTile(tile);
     },
     rotate: function(e) {
       this.model.rotate(e.currentTarget.id);
+    },
+    destroy: function(){
+      this.remove();
+      this.unbind();
     }
   });
 })(jQuery);

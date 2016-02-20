@@ -10,7 +10,6 @@ var app = app || {};
       this.model.on('change', this.render, this);
     },
     render: function () {
-      debugger;
       this.$el.removeClass();
       if (this.model.get('state') === app.TileState.unoccupied) {
         this.$el.addClass('playable');
