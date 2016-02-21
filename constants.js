@@ -20,22 +20,22 @@ $(function () {
   };
   app.Direction = {
     TL: {
-      id: 1, name: 'TL', x: -1, y: -1, getElId: function (el, x) {
+      id: 1, name: 'TL', x: -1, y: -1, oppositeDirName: 'BR', CW: 'TR', CCW: 'BL', getElId: function (el, x) {
         return el.parentNode.previousElementSibling.children[x - 1].id
       }
     },
     T: {
-      id: 2, name: 'T', x: 0, y: -1, getElId: function (el, x) {
+      id: 2, name: 'T', x: 0, y: -1, oppositeDirName: 'B', CW: 'R', CCW: 'L', getElId: function (el, x) {
         return el.parentNode.previousElementSibling.children[x].id
       }
     },
     TR: {
-      id: 3, name: 'TR', x: 1, y: -1, getElId: function (el, x) {
+      id: 3, name: 'TR', x: 1, y: -1, oppositeDirName: 'BL', CW: 'BR', CCW: 'TL', getElId: function (el, x) {
         return el.parentNode.previousElementSibling.children[x + 1].id
       }
     },
     L: {
-      id: 4, name: 'L', x: -1, y: 0, getElId: function (el) {
+      id: 4, name: 'L', x: -1, y: 0, oppositeDirName: 'R', CW: 'T', CCW: 'B', getElId: function (el) {
         return el.previousElementSibling.id
       }
     },
@@ -45,53 +45,37 @@ $(function () {
       }
     },
     R: {
-      id: 6, name: 'R', x: 1, y: 0, getElId: function (el) {
+      id: 6, name: 'R', x: 1, y: 0, oppositeDirName: 'L', CW: 'B', CCW: 'T', getElId: function (el) {
         return el.nextElementSibling.id
       }
     },
     BL: {
-      id: 7, name: 'BL', x: -1, y: 1, getElId: function (el, x) {
+      id: 7, name: 'BL', x: -1, y: 1, oppositeDirName: 'TR', CW: 'TL', CCW: 'BR', getElId: function (el, x) {
         return el.parentNode.nextElementSibling.children[x - 1].id
       }
     },
     B: {
-      id: 8, name: 'B', x: 0, y: 1, getElId: function (el, x) {
+      id: 8, name: 'B', x: 0, y: 1, oppositeDirName: 'T', CW: 'L', CCW: 'R', getElId: function (el, x) {
         return el.parentNode.nextElementSibling.children[x].id
       }
     },
     BR: {
-      id: 9, name: 'BR', x: 1, y: 1, getElId: function (el, x) {
+      id: 9, name: 'BR', x: 1, y: 1, oppositeDirName: 'TL', CW: 'BL', CCW: 'TL', getElId: function (el, x) {
         return el.parentNode.nextElementSibling.children[x + 1].id;
       }
     }
   };
   app.Rotation = {
-    _0: {id: 0},
-    _90: {id: 90},
-    _180: {id: 180},
-    _270: {id: 270}
+    _0: {name: '_0', CW: '_90', CCW: '_270'},
+    _90: {name: '_90', CW: '_180', CCW: '_0'},
+    _180: {name: '_180', CW: '270', CCW: '_90'},
+    _270: {name: '_270', CW: '_0', CCW: '_180'}
   };
-  app.Direction.TL.opposite = app.Direction.BR;
-  app.Direction.T.opposite = app.Direction.B;
-  app.Direction.TR.opposite = app.Direction.BL;
-  app.Direction.L.opposite = app.Direction.R;
-  app.Direction.R.opposite = app.Direction.L;
-  app.Direction.BL.opposite = app.Direction.TR;
-  app.Direction.B.opposite = app.Direction.T;
-  app.Direction.BR.opposite = app.Direction.TL;
-  app.Rotation._0.CW = app.Rotation._90;
-  app.Rotation._0.CCW = app.Rotation._270;
-  app.Rotation._90.CW = app.Rotation._180;
-  app.Rotation._90.CCW = app.Rotation._0;
-  app.Rotation._180.CW = app.Rotation._270;
-  app.Rotation._180.CCW = app.Rotation._90;
-  app.Rotation._270.CW = app.Rotation._0;
-  app.Rotation._270.CCW = app.Rotation._180;
   app.NeighborDirection = {
-    T: {dir: app.Direction.T, CW: 'R', CCW: 'L'},
-    R: {dir: app.Direction.R, CW: 'B', CCW: 'T'},
-    L: {dir: app.Direction.L, CW: 'T', CCW: 'B'},
-    B: {dir: app.Direction.B, CW: 'L', CCW: 'R'}
+    T: app.Direction.T,
+    R: app.Direction.R,
+    L: app.Direction.L,
+    B: app.Direction.B
   };
   app.PlayableTiles = {
     two_face_adjacent_castle: {

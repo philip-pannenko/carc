@@ -7,15 +7,15 @@ var app = app || {};
     initialize: function (options) {
       Backbone.on('tilePlaced', this.tilePlaced, this);
       this.model = new app.Grid();
-      var newTiles = [];
-      this.collection = new app.Tiles();
+      var newTilesView = [];
+
       for (var i = 0, row; row = this.$el[0].rows[i]; i++) {
         for (var j = 0, col; col = row.cells[j]; j++) {
           var tile = null;
           if ((i == 0 && j == 1) || (i == 1 && j == 0) || (i == 1 && j == 2) || (i == 2 && j == 1)) {
             tile = new app.Tile({id: col.id, state: app.TileState.unoccupied});
           } else if (i == 1 && j == 1) {
-            var tile = options.tile;
+            tile = options.tile;
             tile.set({
               id: col.id,
               state: app.TileState.occupied
@@ -24,23 +24,26 @@ var app = app || {};
             tile = new app.Tile({id: col.id});
           }
           var tileView = new app.TileView({el: col, id: col.id, model: tile});
-          this.collection.add(tile);
-          newTiles.push(tileView);
+          this.model.get('tiles').add(tile);
+          newTilesView.push(tileView);
         }
       }
-      this.updateNewTilesNeighbors(newTiles,3, 3);
+      this.model.updateNewTilesNeighbors(newTilesView, 3, 3);
     },
+
     tilePlaced: function (cell) {
       // Determine if board needs expanding
       this.expandBoardIfNeeded(cell);
       // Connect segments
       //this.connectSegments(cell);
       // Update the selected tiles neighbors
-      var tile = this.collection.get(cell.id);
-      tile.updatePlayableTiles();
+      var tile = this.model.get('tiles').get(cell.id);
+      tile.updateAdjacentTiles();
 
       Backbone.trigger('nextTurn', this.el);
     },
+
+    // needs to be in view because we're handling creating additional rows/cols
     expandBoardIfNeeded: function (cell) {
       var cellIndex = cell.cellIndex;
       var rowIndex = cell.parentElement.rowIndex;
@@ -50,6 +53,7 @@ var app = app || {};
       var expandY = false;
       var row = null;
       var col = null;
+
       if (cellIndex === 0) {
         // expand to left
         col = 0;
@@ -67,65 +71,35 @@ var app = app || {};
         row = -1;
         expandY = true;
       }
-      if (expandX || expandY) {
 
-        var newTiles = [];
+      if (expandX || expandY) {
+        var newTilesDOM = [];
 
         // create DOM Tiles
         if (expandY) {
           row = this.el.insertRow(row);
           for (var i = 0; i < totalColumnCount; i++) {
-            cell = row.insertCell(0);
-            cell.id = app.TILE_SEQ_NUM++;
-            newTiles.push(cell);
+            var yCell = row.insertCell(i);
+            yCell.id = app.TILE_SEQ_NUM++;
+            newTilesDOM.push(yCell);
           }
         } else if (expandX) {
           for (var i = 0; i < totalRowCount; i++) {
-            cell = this.el.firstElementChild.children[i].insertCell(col);
-            cell.id = app.TILE_SEQ_NUM++;
-            newTiles.push(cell);
+            var xCell = this.el.firstElementChild.children[i].insertCell(col);
+            xCell.id = app.TILE_SEQ_NUM++;
+            newTilesDOM.push(xCell);
           }
         }
         // update counts after DOM modification
         totalColumnCount = cell.parentElement.childElementCount;
         totalRowCount = cell.parentElement.parentElement.childElementCount;
-        // assign DOM Tiles to Models
-        this.assignTileDOMToModel(newTiles);
-        this.updateNewTilesNeighbors(newTiles,totalColumnCount, totalRowCount);
-      }
-    },
 
-    assignTileDOMToModel: function (newTiles) {
-      for (var i = 0; i < newTiles.length; i++) {
-        var tile = new app.Tile({id: newTiles[i].id});
-        var tileView = new app.TileView({el: newTiles[i], model: tile});
-        tileView.render();
-        this.collection.add(tile);
-        newTiles[i] = tileView;
+        // assign DOM Tiles to Models
+        var newTilesView = this.model.assignTileDOMToTileView(newTilesDOM);
+        this.model.updateNewTilesNeighbors(newTilesView, totalColumnCount, totalRowCount);
       }
-    },
-    updateNewTilesNeighbors: function (newTiles, totalColumnCount, totalRowCount) {
-      _.each(newTiles, function (newTileView) {
-        _.each(app.Direction, function (val, key) {
-          var x = newTileView.el.cellIndex;
-          var y = newTileView.el.parentNode.rowIndex;
-          var neigh_x = x + val.x;
-          var neigh_y = y + val.y;
-          if (neigh_x < 0 || neigh_x === totalColumnCount ||
-            neigh_y < 0 || neigh_y === totalRowCount ||
-            (neigh_y === y && neigh_x === x )) {
-            // skip direction
-          } else {
-            var newTile = newTileView.model;
-            //var x = newTileView.el.cellIndex;
-            var id = val.getElId(newTileView.el, x);
-            var neighborTile = this.collection.get(id);
-            //var neighborTile = this.getNeighboringTile(newTileView.el, dir);
-            newTile.get('adjacentNeighbors')[key] = neighborTile;
-            neighborTile.get('adjacentNeighbors')[val.opposite.name] = newTile;
-          }
-        }, this);
-      }, this);
     }
+
+
   });
 })(jQuery);

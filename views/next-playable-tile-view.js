@@ -13,7 +13,7 @@ var app = app || {};
     },
     render: function () {
       this.$el.removeClass();
-      this.$el.addClass('tile ' + this.model.get('class') + ' _' + this.model.get('rotation').id);
+      this.$el.addClass('tile ' + this.model.get('class') + ' ' + this.model.get('rotation').name);
       this.$el.html(this.model.get('id'));
       return this;
     },

@@ -13,17 +13,17 @@ var app = app || {};
         rotation: app.Rotation._0
       }
     },
-
-    rotate: function (rotation) {
-      this.set('rotation', this.get('rotation')[rotation]);
+    // rotationDirecion is either CW or CCW
+    rotate: function (rotationDirecion) {
+      this.set('rotation', app.Rotation[this.get('rotation')[rotationDirecion]]);
       var faces = this.get('faces');
       var temp = faces['T'];
-      if (rotation === 'CW') {
+      if (rotationDirecion === 'CW') {
         faces['T'] = faces['L'];
         faces['L'] = faces['B'];
         faces['B'] = faces['R'];
         faces['R'] = temp;
-      } else if (rotation === 'CCW') {
+      } else if (rotationDirecion === 'CCW') {
         faces['T'] = faces['R'];
         faces['R'] = faces['B'];
         faces['B'] = faces['L'];
@@ -31,7 +31,8 @@ var app = app || {};
       }
     },
 
-    updatePlayableTiles: function() {
+    updateAdjacentTiles: function() {
+      debugger;
       _.each(app.NeighborDirection, function (dir, key) {
         var adjacentTile = this.get('adjacentNeighbors')[key];
         if (adjacentTile.get('state') === null) {
@@ -50,11 +51,11 @@ var app = app || {};
     },
 
     compareTileToCurrentTurnTile: function(tile) {
+      debugger;
       var foundConflictingNeighborFace = _.find(app.NeighborDirection, function (dir, key) {
         var adjacentNeighbor = tile.get('adjacentNeighbors')[key];
         if (adjacentNeighbor && adjacentNeighbor.get('state') === app.TileState.occupied) {
-          var oppositeDir = dir.dir.opposite.name;
-          var neighborFace = adjacentNeighbor.get('faces')[oppositeDir];
+          var neighborFace = adjacentNeighbor.get('faces')[dir.oppositeDirName];
           var playableTileFace = this.get('faces')[key];
           return playableTileFace.face !== neighborFace.face;
         } else {
@@ -71,7 +72,11 @@ var app = app || {};
           state: app.TileState.occupied
         });
       }
+    },
 
+    assignNeighboringTilesWithOneAnother: function(options) {
+      options.tile.get('adjacentNeighbors')[options.dir.name] = this;
+      this.get('adjacentNeighbors')[options.dir.oppositeDirName] = options.tile;
     }
   });
 })();
