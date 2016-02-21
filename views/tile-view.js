@@ -24,7 +24,6 @@ var app = app || {};
     },
 
     tileClicked: function () {
-      debugger;
       if (this.model.get('state') === app.TileState.unoccupied) {
         Backbone.trigger('compareTileToCurrentTurnTile', this.model);
         if (this.model.get('state') === app.TileState.occupied) {

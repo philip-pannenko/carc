@@ -32,7 +32,6 @@ var app = app || {};
     },
 
     updateAdjacentTiles: function() {
-      debugger;
       _.each(app.NeighborDirection, function (dir, key) {
         var adjacentTile = this.get('adjacentNeighbors')[key];
         if (adjacentTile.get('state') === null) {
@@ -42,7 +41,6 @@ var app = app || {};
 
           // Get the opposite tiles segment and merge it with this one.
           //var oppositeDir = dir.dir.opposite.name;
-          //debugger;
           //var neighborFace = adjacentTile.get('faces')[oppositeDir];
           //var playableTileFace = tile.get('faces')[key];
           //return playableTileFace.face !== neighborFace.face;
@@ -51,7 +49,6 @@ var app = app || {};
     },
 
     compareTileToCurrentTurnTile: function(tile) {
-      debugger;
       var foundConflictingNeighborFace = _.find(app.NeighborDirection, function (dir, key) {
         var adjacentNeighbor = tile.get('adjacentNeighbors')[key];
         if (adjacentNeighbor && adjacentNeighbor.get('state') === app.TileState.occupied) {

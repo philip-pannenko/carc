@@ -18,7 +18,6 @@ var app = app || {};
       Backbone.trigger('rotate', e);
     },
     nextTurn: function () {
-      debugger;
       var view = this.model.get('nextPlayableTileView');
       if(view) {
         view.destroy();

@@ -68,7 +68,7 @@ $(function () {
   app.Rotation = {
     _0: {name: '_0', CW: '_90', CCW: '_270'},
     _90: {name: '_90', CW: '_180', CCW: '_0'},
-    _180: {name: '_180', CW: '270', CCW: '_90'},
+    _180: {name: '_180', CW: '_270', CCW: '_90'},
     _270: {name: '_270', CW: '_0', CCW: '_180'}
   };
   app.NeighborDirection = {

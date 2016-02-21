@@ -167,6 +167,22 @@ describe('TileModel', function () {
       tile.rotate(CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._270);
     });
+
+    it('should perform assignNeighboringTilesWithOneAnother successfully', function() {
+
+      var options = {
+        tile : new app.Tile(),
+        dir : app.Direction.T
+      };
+
+      var tile = new app.Tile();
+
+      tile.assignNeighboringTilesWithOneAnother(options);
+
+      expect(tile.attributes.adjacentNeighbors['B']).toEqual(options.tile);
+      expect(options.tile.attributes.adjacentNeighbors['T']).toEqual(tile);
+
+    });
   });
 
 });
