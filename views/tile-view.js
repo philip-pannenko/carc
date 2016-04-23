@@ -9,18 +9,51 @@ var app = app || {};
     model: app.Tile,
 
     initialize: function () {
+      this.DEBUG_SEGMENT = false;
+      this.DEBUG_TILE = false;
+
       this.model.on('change', this.render, this);
       Backbone.on('assignNeighboringTilesWithOneAnother:' + this.model.id, this.model.assignNeighboringTilesWithOneAnother, this.model);
+      Backbone.on('debugSegment', this.toggleDebugSegment, this);
+      Backbone.on('debugTile', this.toggleDebugTile, this);
+    },
+
+    toggleDebugSegment: function() {
+      this.DEBUG_SEGMENT = !this.DEBUG_SEGMENT;
+      this.render();
+    },
+
+    toggleDebugTile: function() {
+      this.DEBUG_TILE= !this.DEBUG_TILE;
+      this.render();
     },
 
     render: function () {
       this.$el.removeClass();
+
+      this.$el.empty();
+
+      if(this.DEBUG_TILE) {
+        var debugTile = $('<span />').addClass('debugTile').css('position','absolute').css('z-index', '1').html(this.model.get('id'));
+        this.$el.append(debugTile);
+      } else {
+        this.$el.find('.debugTile').remove();
+      }
+
+      if(this.DEBUG_SEGMENT) {
+        var debugSegment = $('<span />').addClass('debugSegment').css('position','absolute').css('z-index', '2').html('debugSegment');
+        this.$el.append(debugSegment);
+      } else {
+        this.$el.find('.debugSegment').remove();
+      }
+
       if (this.model.get('state') === app.TileState.unoccupied) {
         this.$el.addClass('playable');
       } else if (this.model.get('state') === app.TileState.occupied) {
-        this.$el.addClass('tile ' + this.model.get('class') + ' ' + this.model.get('rotation').name);
+        var span = $('<span />').addClass('tile ' + this.model.get('class') + ' ' + this.model.get('rotation').name);
+        this.$el.append(span);
       }
-      this.$el.html(this.model.get('id'));
+
     },
 
     tileClicked: function () {

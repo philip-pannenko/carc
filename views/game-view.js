@@ -5,7 +5,9 @@ var app = app || {};
     el: '#container',
     model: app.Game,
     events: {
-      'click button.rotate': 'rotate'
+      'click button.rotate': 'rotate',
+      'click button.debugsegment': 'debugSegment',
+      'click button.debugtile': 'debugTile'
     },
     initialize: function () {
       Backbone.on('nextTurn', this.nextTurn, this);
@@ -16,6 +18,12 @@ var app = app || {};
     },
     rotate: function (e) {
       Backbone.trigger('rotate', e);
+    },
+    debugSegment: function () {
+      Backbone.trigger('debugSegment');
+    },
+    debugTile: function () {
+      Backbone.trigger('debugTile');
     },
     nextTurn: function () {
       var view = this.model.get('nextPlayableTileView');

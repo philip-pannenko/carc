@@ -14,10 +14,12 @@ table td {
     text-align: left;
 }
 
+
+
 .tile {
-    /*display: block;*/
-    /*height:152px;*/
-    /*width:152px;*/
+    display: block;
+    height:152px;
+    width:152px;
     /*position:absolute;*/
     background-image: url('../images/tiles.png');
     background-repeat: no-repeat;
