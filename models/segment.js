@@ -7,8 +7,17 @@ var app = app || {};
         'id': -1,
         'owned': undefined,
         'type': undefined,
-        'connected': []
+        'connectedTiles': []
       }
-    }
+    },
+
+    //incrementCount: function (increment) {
+    //  this.set('connected', this.get('connected') + increment);
+    //},
+    //
+    //decrementCount: function (decrement) {
+    //  this.set('connected', this.get('connected') - decrement);
+    //}
+
   });
 })();

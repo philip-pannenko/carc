@@ -20,7 +20,7 @@ var app = app || {};
         }
       }, this);
       // shuffle all
-      this.get('nextPlayableTiles').reset(this.get('nextPlayableTiles').shuffle(), {silent: true});
+      //this.get('nextPlayableTiles').reset(this.get('nextPlayableTiles').shuffle(), {silent: true});
       // add first tile
       this.get('nextPlayableTiles').push(tile);
     },
@@ -31,8 +31,9 @@ var app = app || {};
         faces: clonedPlayableTile.faces,
         class: clonedPlayableTile.class
       });
-      for (var segment in clonedPlayableTile.segments) {
-        var segmentModel = new app.Segment({id: app.SEGMENT_SEQ_NUM++, type: segment.type});
+      for (var i =0; i< clonedPlayableTile.segments.length; i++) {
+        var segment = clonedPlayableTile.segments[i];
+        var segmentModel = new app.Segment({id: app.SEGMENT_SEQ_NUM++, type: segment.type, connectedTiles: [nextPlayableTile]});
         this.get('segments').push(segmentModel);
         nextPlayableTile.get('segments').push(segmentModel);
       }

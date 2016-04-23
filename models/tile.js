@@ -36,14 +36,47 @@ var app = app || {};
         var adjacentTile = this.get('adjacentNeighbors')[key];
         if (adjacentTile.get('state') === null) {
           adjacentTile.set('state', app.TileState.unoccupied);
-          // segment work todo
-        //} else if (adjacentTile.get('state') === app.TileState.occupied) {
+        } else if (adjacentTile.get('state') === app.TileState.occupied) {
 
-          // Get the opposite tiles segment and merge it with this one.
-          //var oppositeDir = dir.dir.opposite.name;
-          //var neighborFace = adjacentTile.get('faces')[oppositeDir];
-          //var playableTileFace = tile.get('faces')[key];
-          //return playableTileFace.face !== neighborFace.face;
+          console.log('This Tile Id: ' + this.id);
+          // get the segment associated with the oppo
+          var segmentIndices = adjacentTile.get('faces')[dir.oppositeDirName].segments;
+          for(var i =0; i < segmentIndices.length; i++) {
+
+            // get the opposite segment
+            var adjacentFaceSegment = adjacentTile.get('segments')[segmentIndices[i]];
+
+            // get the current segment
+            var faceSegment = this.get('segments')[this.get('faces')[dir.name].segments[i]];
+            console.log(' This Tile Id: ' + this.id + ', Segment[' + i +'].id: ' + faceSegment.id);
+            console.log(' Adjacent Tile Id: ' + adjacentTile.id + ', Segment[' + i +'].id: ' + adjacentFaceSegment.id);
+
+            // if the segments are not already connected, connect them
+            if (adjacentFaceSegment.get('id') !== faceSegment.get('id')) {
+              var connectedSegmentTiles = faceSegment.get('connectedTiles');
+
+              // find all of the connected tiles on the current segment
+              for(var j=0; j< connectedSegmentTiles.length; j++) {
+                var connectedSegmentTile = connectedSegmentTiles[j];
+
+                // search for a specific segment on the tile and swap it out with the new segment
+                for(var y=0; y<connectedSegmentTile.get('segments').length; y++) {
+                  var connectedTileSegment = connectedSegmentTile.get('segments')[y];
+
+                  console.log('  Connected Tile Id: ' + connectedSegmentTile.id + ', Segment.id: ' + connectedTileSegment.id);
+
+                  // when it's found, swap the segment with the new segment
+                  if (connectedTileSegment === faceSegment) {
+                    console.log('  Connected Tile Segment: ' + connectedTileSegment.id + ', Face Segment: ' + faceSegment.id);
+                    connectedSegmentTile.get('segments')[y] = adjacentFaceSegment;
+                    adjacentFaceSegment.get('connectedTiles').push(connectedSegmentTile);
+                    break;
+                  }
+                }
+              }
+              adjacentFaceSegment.set('owned', faceSegment.get('owned')); // this needs to be changed to an array. for now, just true
+            }
+          }
         }
       }, this);
     },
