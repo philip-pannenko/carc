@@ -1,7 +1,7 @@
 var app = app || {};
 $(function () {
   'use strict';
-  app.TILE_SEQ_NUM = 10;
+  app.TILE_SEQ_NUM = 10;;
   app.SEGMENT_SEQ_NUM = 1;
   app.PLAYABLE_TILE_EGMENT_SEQ_NUM = 1;
   Array.prototype.clear = function () {
