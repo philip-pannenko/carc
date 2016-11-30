@@ -13,28 +13,27 @@ var app = app || {};
     },
     render: function () {
       this.$el.removeClass();
-      this.$el.addClass('tile ' + this.model.get('class') + ' ' + this.model.get('rotation').name);
+      this.$el.addClass('tile ' + this.model.get('class') + ' ' + this.model.get('rotation'));
       this.$el.html(this.model.get('id'));
       return this;
     },
-    compareTileToCurrentTurnTile: function(tile) {
-      this.model.compareTileToCurrentTurnTile(tile);
+    compareTileToCurrentTurnTile: function (tile) {
+      var isTileValidDrop = app.Tile.isNewTileValidDrop(tile, this.model);
+      if (isTileValidDrop) {
+        app.Tile.assignTileToOtherTile(tile, this.model);
+      }
     },
-    rotate: function(e) {
-      this.model.rotate(e.currentTarget.id);
+    rotate: function (e) {
+      if (app.game.isGameStateTile()) {
+        app.Tile.rotate(this.model, e.currentTarget.id);
+      }
     },
 
-    destroy: function(){
+    destroy: function () {
       Backbone.off('compareTileToCurrentTurnTile');
       Backbone.off('rotate');
       this.remove();
       this.unbind();
     }
-    //remove: function() {
-    //  this.undelegateEvents();
-    //  this.$el.empty();
-    //  this.stopListening();
-    //  return this;
-    //}
   });
 })(jQuery);

@@ -148,23 +148,23 @@ describe('TileModel', function () {
       var CCW = 'CCW';
 
       expect(tile.get('rotation')).toEqual(app.Rotation._0);
-      tile.rotate(CW);
+      app.Tile.rotate(tile,CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._90);
-      tile.rotate(CW);
+      app.Tile.rotate(tile,CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._180);
-      tile.rotate(CW);
+      app.Tile.rotate(tile,CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._270);
-      tile.rotate(CW);
+      app.Tile.rotate(tile,CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._0);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._270);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._180);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._90);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._0);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._270);
     });
 

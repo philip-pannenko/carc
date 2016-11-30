@@ -5,45 +5,41 @@ var app = app || {};
     el: '#board',
     mode: app.GridView,
     initialize: function (options) {
-      Backbone.on('tilePlaced', this.tilePlaced, this);
-      this.model = new app.Grid();
-      var newTilesView = [];
 
+      Backbone.on('placeTile', this.placeTile, this);
+      this.model = new app.Grid();
+
+      var newTileViews = [];
+      // TODO Add method to extract all EL ids, in a data structure that is X,Y,ID
+      // TODO Pass that into model to do this whole for-loop
+      // TODO Loop one last time to do a render on all tiles...
       for (var i = 0, row; row = this.$el[0].rows[i]; i++) {
         for (var j = 0, col; col = row.cells[j]; j++) {
-          var tile = null;
-          if ((i == 0 && j == 1) || (i == 1 && j == 0) || (i == 1 && j == 2) || (i == 2 && j == 1)) {
-            tile = new app.Tile({id: col.id, state: app.TileState.unoccupied});
-          } else if (i == 1 && j == 1) {
-            tile = options.tile;
-            tile.set({
-              id: col.id,
-              state: app.TileState.occupied
-            });
-          } else {
-            tile = new app.Tile({id: col.id});
-          }
-          var tileView = new app.TileView({el: col, id: col.id, model: tile});
-          this.model.get('tiles').add(tile);
-          newTilesView.push(tileView);
+          var tile = this.model.initializeTile(col, i, j);
+          newTileViews.push(new app.TileView({el: col, id: col.id, model: tile}));
         }
       }
-      this.model.updateNewTilesNeighbors(newTilesView, 3, 3);
+
+      _.each(newTileViews, function (newTileView) {
+        this.model.linkSurroundingTiles(newTileView, 3, 3);
+        newTileView.render();
+      }, this);
+
     },
 
-    tilePlaced: function (cell) {
+    placeTile: function (cell) {
       // Determine if board needs expanding
       this.expandBoardIfNeeded(cell);
       // Connect segments
       //this.connectSegments(cell);
-      // Update the selected tiles neighbors
-      var tile = this.model.get('tiles').get(cell.id);
-      tile.updateAdjacentTiles();
 
-      Backbone.trigger('nextTurn', this.el);
+      // Update the selected tiles neighbors
+      var tile = app.game.getTile(cell.id);
+      tile.updateAdjacentTiles();
+      Backbone.trigger('tilePlacedOnGrid', tile);
     },
 
-    // needs to be in view because we're handling creating additional rows/cols
+    // TODO see how much of this can be moved into the model although needs to be in view because we're handling creating additional rows/cols
     expandBoardIfNeeded: function (cell) {
       var cellIndex = cell.cellIndex;
       var rowIndex = cell.parentElement.rowIndex;
@@ -79,13 +75,13 @@ var app = app || {};
         if (expandY) {
           row = this.el.insertRow(row);
           for (var i = 0; i < totalColumnCount; i++) {
-            var yCell = row.insertCell(i);
+            var yCell = row.insertCell(i); // VIEW related
             yCell.id = app.TILE_SEQ_NUM++;
             newTilesDOM.push(yCell);
           }
         } else if (expandX) {
           for (var i = 0; i < totalRowCount; i++) {
-            var xCell = this.el.firstElementChild.children[i].insertCell(col);
+            var xCell = this.el.firstElementChild.children[i].insertCell(col); // VIEW related
             xCell.id = app.TILE_SEQ_NUM++;
             newTilesDOM.push(xCell);
           }
@@ -95,8 +91,13 @@ var app = app || {};
         totalRowCount = cell.parentElement.parentElement.childElementCount;
 
         // assign DOM Tiles to Models
-        var newTilesView = this.model.assignTileDOMToTileView(newTilesDOM);
-        this.model.updateNewTilesNeighbors(newTilesView, totalColumnCount, totalRowCount);
+        var newTileViews = this.model.assignTileDOMToTileView(newTilesDOM);
+
+        _.each(newTileViews, function (newTileView) {
+          this.model.linkSurroundingTiles(newTileView, totalColumnCount, totalRowCount);
+          newTileView.render();
+        }, this);
+
       }
     }
 

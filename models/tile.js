@@ -5,108 +5,137 @@ var app = app || {};
     defaults: function () {
       return {
         id: -1,
-        adjacentNeighbors: {},
+        adjacentNeighbors: {}, // app.Direction.name : tile.id
         class: "",
-        faces: {},
-        segments: [],
+        segments: {}, // app.Direction.name : segment.id
         state: app.TileState.undefined,
-        rotation: app.Rotation._0
-      }
-    },
-    // rotationDirecion is either CW or CCW
-    rotate: function (rotationDirecion) {
-      this.set('rotation', app.Rotation[this.get('rotation')[rotationDirecion]]);
-      var faces = this.get('faces');
-      var temp = faces['T'];
-      if (rotationDirecion === 'CW') {
-        faces['T'] = faces['L'];
-        faces['L'] = faces['B'];
-        faces['B'] = faces['R'];
-        faces['R'] = temp;
-      } else if (rotationDirecion === 'CCW') {
-        faces['T'] = faces['R'];
-        faces['R'] = faces['B'];
-        faces['B'] = faces['L'];
-        faces['L'] = temp;
+        rotation: app.Rotation._0.name,
+        isPawnTarget: false,
+        pawnCoordinates: undefined // app.Direction
       }
     },
 
-    updateAdjacentTiles: function() {
-      _.each(app.NeighborDirection, function (dir, key) {
-        var adjacentTile = this.get('adjacentNeighbors')[key];
-        if (adjacentTile.get('state') === null) {
+    getSegmentByTileCoordinate: function (dir) {
+      return this.get('segments')[dir.name];
+    },
+
+    updateAdjacentTiles: function () {
+      _.each(app.DirectionFaces, function (directionFace, directionName) {
+        var adjacentTile = this.getAdjacentNeighbor(directionName);
+        if (app.Tile.isTileStateUndefined(adjacentTile)) {
           adjacentTile.set('state', app.TileState.unoccupied);
-        } else if (adjacentTile.get('state') === app.TileState.occupied) {
+        } else if (app.Tile.isTileStateOccupied(adjacentTile)) {
 
-          console.log('This Tile Id: ' + this.id);
-          // get the segment associated with the oppo
-          var segmentIndices = adjacentTile.get('faces')[dir.oppositeDirName].segments;
-          for(var i =0; i < segmentIndices.length; i++) {
+          console.log('Tile ' + this.id + ' will merge segments with Adjacent Tile ' + adjacentTile.id);
+          var adjacentTilesSegments = app.Tile.getDirectionFaceSegmentsForTile(adjacentTile, app.DirectionFaces[directionFace.opposite]);
+          var thisTilesSegments = app.Tile.getDirectionFaceSegmentsForTile(this, directionFace);
 
-            // get the opposite segment
-            var adjacentFaceSegment = adjacentTile.get('segments')[segmentIndices[i]];
-
-            // get the current segment
-            var faceSegment = this.get('segments')[this.get('faces')[dir.name].segments[i]];
-            console.log(' This Tile Id: ' + this.id + ', Segment[' + i +'].id: ' + faceSegment.id);
-            console.log(' Adjacent Tile Id: ' + adjacentTile.id + ', Segment[' + i +'].id: ' + adjacentFaceSegment.id);
-
-            // if the segments are not already connected, connect them
-            if (adjacentFaceSegment.get('id') !== faceSegment.get('id')) {
-              var connectedSegmentTiles = faceSegment.get('connectedTiles');
-
-              // find all of the connected tiles on the current segment
-              for(var j=0; j< connectedSegmentTiles.length; j++) {
-                var connectedSegmentTile = connectedSegmentTiles[j];
-
-                // search for a specific segment on the tile and swap it out with the new segment
-                for(var y=0; y<connectedSegmentTile.get('segments').length; y++) {
-                  var connectedTileSegment = connectedSegmentTile.get('segments')[y];
-
-                  console.log('  Connected Tile Id: ' + connectedSegmentTile.id + ', Segment.id: ' + connectedTileSegment.id);
-
-                  // when it's found, swap the segment with the new segment
-                  if (connectedTileSegment === faceSegment) {
-                    console.log('  Connected Tile Segment: ' + connectedTileSegment.id + ', Face Segment: ' + faceSegment.id);
-                    connectedSegmentTile.get('segments')[y] = adjacentFaceSegment;
-                    adjacentFaceSegment.get('connectedTiles').push(connectedSegmentTile);
-                    break;
-                  }
-                }
-              }
-              adjacentFaceSegment.set('owned', faceSegment.get('owned')); // this needs to be changed to an array. for now, just true
-            }
+          if (thisTilesSegments[1].get('type') === 'C' || thisTilesSegments[1].get('type') === 'F') {
+            thisTilesSegments[1].mergeWithSegment(adjacentTilesSegments[1]);
+          } else {
+            thisTilesSegments[0].mergeWithSegment(adjacentTilesSegments[0]);
+            thisTilesSegments[1].mergeWithSegment(adjacentTilesSegments[1]);
+            thisTilesSegments[2].mergeWithSegment(adjacentTilesSegments[2]);
           }
         }
       }, this);
     },
 
-    compareTileToCurrentTurnTile: function(tile) {
-      var foundConflictingNeighborFace = _.find(app.NeighborDirection, function (dir, key) {
-        var adjacentNeighbor = tile.get('adjacentNeighbors')[key];
-        if (adjacentNeighbor && adjacentNeighbor.get('state') === app.TileState.occupied) {
-          var neighborFace = adjacentNeighbor.get('faces')[dir.oppositeDirName];
-          var playableTileFace = this.get('faces')[key];
-          return playableTileFace.face !== neighborFace.face;
+    assignNeighboringTilesWithOneAnother: function (tile, dir) {
+      tile.putAdjacentNeighbors(dir.name, this.id);
+      this.putAdjacentNeighbors(dir.oppositeDirName, tile.id);
+    },
+
+    getAdjacentNeighbor: function (direction) {
+      return app.game.getTile(this.get('adjacentNeighbors')[direction]);
+    },
+
+    putAdjacentNeighbors: function (direction, tileId) {
+      this.get('adjacentNeighbors')[direction] = tileId;
+    }
+
+  }, {
+
+    //* Static Methods *//
+
+    // rotationDirecion is either CW or CCW
+    rotate: function (tile, rotateDir) {
+
+      tile.set('rotation', app.Rotation[tile.get('rotation')][rotateDir]);
+      var faces = tile.get('faces');
+
+      var clonedSegmentIndexByCoordinate = _.clone(tile.get('segments'));
+      _.each(app.Direction, function (dir, dirName) {
+        var nextSegmentIndex = tile.get('segments')[dirName];
+        //var currentSegmentIndex = tile.get('segmentIndexByCoordinate')[dir[rotateDir]];
+        //console.log(dir[rotateDir] + ':' + tile.get('segmentIndexByCoordinate')[dir[rotateDir]] + ', will be replaced by ' + dirName + ':' + nextSegmentIndex);
+        clonedSegmentIndexByCoordinate[dir[rotateDir]] = nextSegmentIndex;
+      }, this);
+      tile.set('segments', clonedSegmentIndexByCoordinate, {silent: true});
+    },
+
+    getDirectionFaceSegmentsForTile: function (tile, directionFace) {
+      var result = [];
+      var index = -1;
+      index = tile.get('segments')[directionFace.faces[0].name];
+      result.push(app.game.getSegment(index));
+
+      index = tile.get('segments')[directionFace.faces[1].name];
+      result.push(app.game.getSegment(index));
+
+      index = tile.get('segments')[directionFace.faces[2].name];
+      result.push(app.game.getSegment(index));
+
+      return result;
+    },
+
+    isNewTileValidDrop: function (t1, t2) {
+      return !_.find(app.DirectionFaces, function (directionFace, directionName) {
+        var adjacentNeighbor = t1.getAdjacentNeighbor(directionName);
+        if (app.Tile.isTileStateOccupied(adjacentNeighbor)) {
+
+          var adjacentTilesSegments = app.Tile.getDirectionFaceSegmentsForTile(adjacentNeighbor, app.DirectionFaces[directionFace.opposite]);
+          var thisTilesSegments = app.Tile.getDirectionFaceSegmentsForTile(t2, directionFace);
+
+          return thisTilesSegments[1].get('type') !== adjacentTilesSegments[1].get('type');
         } else {
           return false;
         }
-      }, this);
-      if (!foundConflictingNeighborFace) {
-        // assign this models tile info with the tile that was passed into this method
-        tile.set({
-          class: this.get('class'),
-          faces: this.get('faces'),
-          segments: this.get('segments'),
-          rotation: this.get('rotation'),
-          state: app.TileState.occupied
-        });
-      }
+      });
+
     },
 
-    assignNeighboringTilesWithOneAnother: function(options) {
-      options.tile.get('adjacentNeighbors')[options.dir.name] = this;
-      this.get('adjacentNeighbors')[options.dir.oppositeDirName] = options.tile;
+    assignTileToOtherTile: function (t1, t2) {
+
+      // Assign the drop tile segment links to the new domID found in t1
+      _.each(t2.get('segments'), function (segmentId, dir) {
+        var segment = app.game.getSegment(segmentId);
+        if (segment) {
+          segment.get('connectedTiles')[0] = t1.id;
+        }
+      }, t1);
+
+      // Assign this models tile info with the tile that was passed into this method
+      t1.set({
+        class: t2.get('class'),
+        segments: t2.get('segments'),
+        rotation: t2.get('rotation'),
+        state: app.TileState.occupied
+      });
+    },
+
+    isTileStateOccupied: function (tile) {
+      return (tile && tile.get('state') === app.TileState.occupied);
+    },
+
+    isTileStateUnoccupied: function (tile) {
+      return (tile && tile.get('state') === app.TileState.unoccupied);
+    },
+
+    isTileStateUndefined: function (tile) {
+      return (tile && tile.get('state') === app.TileState.undefined);
     }
+
+
   });
 })();

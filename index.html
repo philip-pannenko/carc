@@ -11,12 +11,15 @@
 
     <div class='dashboard' id="dashboard">
         <table>
-            <tr id="nextPlayableTile"/>
+            <tr id="nextPlayableTile"></tr>
         </table>
         <button class="rotate" id="CW">Rotate CW</button>
         <button class="rotate" id="CCW">Rotate CCW</button>
-        <button class="debugsegment">Debug Segment</button>
-        <button class="debugtile">Debug Tile</button>
+        <button class="skip">Skip Turn</button>
+    </div>
+
+    <div class='game-phase'>
+
     </div>
 
     <hr/>
@@ -45,6 +48,7 @@
 <script src="assets/js/libs/jquery-2.2.0.js"></script>
 <script src="assets/js/libs/underscore.js"></script>
 <script src="assets/js/libs/backbone.js"></script>
+<script src="assets/js/libs/backbone.localStorage.js"></script>
 <script src="constants.js"></script>
 <script src="models/game.js"></script>
 <script src="models/grid.js"></script>
