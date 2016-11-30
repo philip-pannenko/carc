@@ -2,7 +2,7 @@ var app = app || {};
 (function ($) {
   'use strict';
   app.NextPlayableTileView = Backbone.View.extend({
-    el: '#nextPlayableTile',
+    tagName: 'td',
     model: app.Tile,
     initialize: function () {
       this.model.on('change:currentTurnTile', this.render, this);
@@ -13,17 +13,27 @@ var app = app || {};
     },
     render: function () {
       this.$el.removeClass();
-      this.$el.addClass('tile ' + this.model.get('class') + ' _' + this.model.get('rotation').id);
+      this.$el.addClass('tile ' + this.model.get('class') + ' ' + this.model.get('rotation'));
+      this.$el.html(this.model.get('id'));
+      return this;
     },
-    //rotate: function (e) {
-    //  this.model.rotate(e.currentTarget.id);
-    //  this.render();
-    //}
-    compareTileToCurrentTurnTile: function(tile) {
-      this.model.compareTileToCurrentTurnTile(tile);
+    compareTileToCurrentTurnTile: function (tile) {
+      var isTileValidDrop = app.Tile.isNewTileValidDrop(tile, this.model);
+      if (isTileValidDrop) {
+        app.Tile.assignTileToOtherTile(tile, this.model);
+      }
     },
-    rotate: function(e) {
-      this.model.rotate(e.currentTarget.id);
+    rotate: function (e) {
+      if (app.game.isGameStateTile()) {
+        app.Tile.rotate(this.model, e.currentTarget.id);
+      }
+    },
+
+    destroy: function () {
+      Backbone.off('compareTileToCurrentTurnTile');
+      Backbone.off('rotate');
+      this.remove();
+      this.unbind();
     }
   });
 })(jQuery);

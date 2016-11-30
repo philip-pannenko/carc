@@ -14,14 +14,95 @@ table td {
     text-align: left;
 }
 
+table .debug td {
+    border: solid 1px blue;
+    height: 48px;
+    width: 48px;
+    vertical-align: top;
+    text-align: center;
+}
+
 .tile {
-    /*display: block;*/
-    /*height:152px;*/
-    /*width:152px;*/
+    display: block;
+    height:152px;
+    width:152px;
     /*position:absolute;*/
     background-image: url('../images/tiles.png');
     background-repeat: no-repeat;
 }
+
+.pawn-spot {
+    float: left;
+    display: block;
+    position: relative;
+    background-color: red;
+    width: 50px;
+    height: 50px;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    z-index: 1;
+}
+
+.top-left {
+    top: 0;
+    left: 0;
+}
+.top {
+    top: 0;
+    left: 51px;
+}
+
+.top-right {
+    top: 0;
+    left: 102px;
+}
+
+.left {
+    top: 51px;
+    left: 0;
+}
+
+.center {
+    top: 51px;
+    left: 51px;
+}
+
+.right {
+    top: 51px;
+    left: 102px;
+}
+
+.bottom-left {
+    top: 102px;
+    left: 0;
+}
+
+.bottom {
+    top: 102px;
+    left: 51px;
+}
+
+.bottom-right {
+    top: 102px;
+    left: 102px;
+}
+
+.pawn-drop-grid {
+    opacity: 0.5;
+    position: absolute;
+    z-index: 1;
+    background-color: yellow;
+}
+
+.pawn-drop-grid td {
+    border: solid 1px black;
+    height: 48px;
+    width: 48px;
+    vertical-align: top;
+    text-align: center;
+}
+
 
 .playable {
     background-color: yellow;

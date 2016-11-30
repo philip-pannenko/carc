@@ -148,24 +148,40 @@ describe('TileModel', function () {
       var CCW = 'CCW';
 
       expect(tile.get('rotation')).toEqual(app.Rotation._0);
-      tile.rotate(CW);
+      app.Tile.rotate(tile,CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._90);
-      tile.rotate(CW);
+      app.Tile.rotate(tile,CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._180);
-      tile.rotate(CW);
+      app.Tile.rotate(tile,CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._270);
-      tile.rotate(CW);
+      app.Tile.rotate(tile,CW);
       expect(tile.get('rotation')).toEqual(app.Rotation._0);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._270);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._180);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._90);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._0);
-      tile.rotate(CCW);
+      app.Tile.rotate(tile,CCW);
       expect(tile.get('rotation')).toEqual(app.Rotation._270);
+    });
+
+    it('should perform assignNeighboringTilesWithOneAnother successfully', function() {
+
+      var options = {
+        tile : new app.Tile(),
+        dir : app.Direction.T
+      };
+
+      var tile = new app.Tile();
+
+      tile.assignNeighboringTilesWithOneAnother(options);
+
+      expect(tile.attributes.adjacentNeighbors['B']).toEqual(options.tile);
+      expect(options.tile.attributes.adjacentNeighbors['T']).toEqual(tile);
+
     });
   });
 

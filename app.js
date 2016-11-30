@@ -1,5 +1,7 @@
 var app = app || {};
 $(function () {
   'use strict';
-  app.gameView = new app.GameView();
+
+  app.game = new app.Game();
+  app.gameView = new app.GameView({model: app.game});
 });
